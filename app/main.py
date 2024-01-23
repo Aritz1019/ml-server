@@ -22,7 +22,6 @@ with open('./modelo/scaler.pkl', 'rb') as file:
     my_scaler = pickle.load(file)
 
 acl_public_subnet_id = os.environ.get('ID_ACL_PUBLIC_SUBNET')
-public_subnet_id = os.environ.get('ID_PUBLIC_SUBNET')
 ip_elastic = os.environ.get('IP_ELASTIC')
 port_elastic = os.environ.get('PORT_ELASTIC')
 
@@ -53,6 +52,7 @@ def preprocesamiento(data):
     test_real_data['http.request.body.bytes'].replace({np.NAN: 0}, inplace=True)
 
     test_real_data = test_real_data[~test_real_data['destination.ip'].apply(is_ip_in_range)]
+    test_real_data = test_real_data[~test_real_data['source.ip'].apply(is_ip_in_range)]
     test_real_data = test_real_data[test_real_data['source.ip'] != '10.0.0.133']
 
     real_data_grouped_df = test_real_data.groupby(['@timestamp', 'destination.ip', 'source.ip'])
@@ -82,7 +82,6 @@ def preprocesamiento(data):
 
 def block_ip(ip):
   ec2_client = boto3.client('ec2', region_name='us-east-1')
-  subnet_id = public_subnet_id
 
   rule = {
       'CidrBlock' : f"{ip}/32",
