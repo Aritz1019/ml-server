@@ -104,7 +104,7 @@ def main():
     try:
 
         # Configuración de la conexión a Elasticsearch
-        es = Elasticsearch([{'host': '54.145.118.178', 'port': 1800, 'scheme': 'http'}])
+        es = Elasticsearch([{'host': ip_elastic, 'port': port_elastic, 'scheme': 'http'}])
         blocked_ips = []
 
         while True:
