@@ -1,0 +1,6 @@
+boto3==1.34.25
+pandas
+pyarrow
+elasticsearch
+pickle5
+scikit-learn==1.2.2

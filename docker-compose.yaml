@@ -1,0 +1,11 @@
+version: '3'
+services:
+  ml_service:
+    build: ./app
+    volumes:
+      - ./app:/app
+    environment:
+      - ID_ACL_PUBLIC_SUBNET="acl-0c967873bc4ce617b"
+      - ID_PUBLIC_SUBNET="subnet-08b2e292c38ae928f"
+      - IP_ELASTIC="54.145.118.178"
+      - PORT_ELASTIC=1800
