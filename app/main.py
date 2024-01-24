@@ -143,6 +143,7 @@ def main():
 
                 if final_real_data is not None:
 
+                    print('---------------------------------------------------------')
                     for x in range(len(final_real_data)):
                         traffic = np.array([list(final_real_data[x])])
                         distances, indices = my_nbrs.kneighbors(traffic)
