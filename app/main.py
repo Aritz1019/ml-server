@@ -72,13 +72,14 @@ def preprocesamiento(data):
     real_clustering_df['open_requests'] = real_data_grouped_df.apply(count_open_requests)
 
     ips = real_clustering_df['source.ip']
+    timestamps = real_clustering_df['@timestamp']
     final_real_data = real_clustering_df[['source.bytes', 'destination.bytes', 'event.duration', 'count_requests', 'open_requests','http.request.body.bytes', 'http.response.body.bytes']]
 
     final_real_data = my_scaler.transform(final_real_data)
   except Exception as e:
-    return None, None
+    return None, None, None
 
-  return final_real_data, ips
+  return final_real_data, ips, timestamps
 
 def block_ip(ip):
   ec2_client = boto3.client('ec2', region_name='us-east-1')
@@ -106,6 +107,7 @@ def main():
         es = Elasticsearch([{'host': "10.0.2.130", 'port': 9200, 'scheme': 'http'}])
         blocked_ips = []
         print("Conexión con ElasticSearch establecida")
+        print("Se van a obtener datos de los últimos 20 segundos")
 
         while True:
             # Tiempo actual
@@ -115,8 +117,8 @@ def main():
             query_range = {
                 "range": {
                     "@timestamp": {
-                        "gte": (current_time - timedelta(seconds=3)).isoformat(),
-                        "lt": (current_time - timedelta(seconds=1)).isoformat(),
+                        "gte": (current_time - timedelta(seconds=20)).isoformat(),
+                        "lt": (current_time - timedelta(seconds=2)).isoformat(),
                     }
                 }
             }
@@ -138,7 +140,7 @@ def main():
             df = pd.json_normalize(data)
 
             if len(df.columns) > 0:
-                final_real_data, ips = preprocesamiento(df)
+                final_real_data, ips, timestamps = preprocesamiento(df)
 
                 if final_real_data is not None:
 
@@ -149,16 +151,16 @@ def main():
 
                         if cluster != 0:
                             if cluster == 1:
-                                print(f'Ataque Slowloris detectado desde la ip {ips[x]}')
+                                print(f'[{timestamps[x]}] Ataque Slowloris detectado desde la ip {ips[x]}')
                             elif cluster == -1:
-                                print(f'Ataque HTTP Flood detectado desde la ip {ips[x]}')
+                                print(f'[{timestamps[x]}] Ataque HTTP Flood detectado desde la ip {ips[x]}')
                             if ips[x] not in blocked_ips:
                                 print(f"Bloqueando la ip {ips[x]}")
                                 blocked_ips.append(ips[x])
                                 block_ip(ips[x])
 
 
-            time.sleep(1)
+            time.sleep(2)
     except Exception as e:
         print(e)
 
