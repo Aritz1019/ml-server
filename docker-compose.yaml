@@ -8,3 +8,4 @@ services:
       - ID_ACL_PUBLIC_SUBNET=${ID_ACL_PUBLIC_SUBNET}
       - IP_ELASTIC=${IP_ELASTIC}
       - PORT_ELASTIC=${PORT_ELASTIC}
+    restart: on-failure
