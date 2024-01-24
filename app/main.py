@@ -72,14 +72,14 @@ def preprocesamiento(data):
     real_clustering_df['open_requests'] = real_data_grouped_df.apply(count_open_requests)
 
     ips = real_clustering_df['source.ip']
-    timestamps = real_clustering_df['@timestamp']
     final_real_data = real_clustering_df[['source.bytes', 'destination.bytes', 'event.duration', 'count_requests', 'open_requests','http.request.body.bytes', 'http.response.body.bytes']]
 
     final_real_data = my_scaler.transform(final_real_data)
   except Exception as e:
-    return None, None, None
+    print(e)
+    return None, None
 
-  return final_real_data, ips, timestamps
+  return final_real_data, ips
 
 def block_ip(ip):
   ec2_client = boto3.client('ec2', region_name='us-east-1')
@@ -140,7 +140,7 @@ def main():
             df = pd.json_normalize(data)
 
             if len(df.columns) > 0:
-                final_real_data, ips, timestamps = preprocesamiento(df)
+                final_real_data, ips = preprocesamiento(df)
 
                 if final_real_data is not None:
 
@@ -151,9 +151,9 @@ def main():
 
                         if cluster != 0:
                             if cluster == 1:
-                                print(f'[{timestamps[x]}] Ataque Slowloris detectado desde la ip {ips[x]}')
+                                print(f'Ataque Slowloris detectado desde la ip {ips[x]}')
                             elif cluster == -1:
-                                print(f'[{timestamps[x]}] Ataque HTTP Flood detectado desde la ip {ips[x]}')
+                                print(f'Ataque HTTP Flood detectado desde la ip {ips[x]}')
                             if ips[x] not in blocked_ips:
                                 print(f"Bloqueando la ip {ips[x]}")
                                 blocked_ips.append(ips[x])
