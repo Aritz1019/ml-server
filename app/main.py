@@ -105,6 +105,7 @@ def main():
         # Configuración de la conexión a Elasticsearch
         es = Elasticsearch([{'host': "10.0.2.130", 'port': 9200, 'scheme': 'http'}])
         blocked_ips = []
+        print("Conexión con ElasticSearch establecida")
 
         while True:
             # Tiempo actual
