@@ -113,7 +113,7 @@ def main():
             # Rango de tiempo para la consulta (último segundo)
             query_range = {
                 "range": {
-                    "event_start": {
+                    "@timestamp": {
                         "gte": (current_time - timedelta(seconds=20)).isoformat(),
                         "lt": (current_time - timedelta(seconds=2)).isoformat(),
                     }
