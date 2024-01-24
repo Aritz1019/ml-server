@@ -117,7 +117,7 @@ def main():
                 "range": {
                     "@timestamp": {
                         "gte": (current_time - timedelta(seconds=20)).isoformat(),
-                        "lt": (current_time - timedelta(seconds=2)).isoformat(),
+                        "lt": (current_time - timedelta(seconds=5)).isoformat(),
                     }
                 }
             }
