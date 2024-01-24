@@ -107,7 +107,6 @@ def main():
         es = Elasticsearch([{'host': "10.0.2.130", 'port': 9200, 'scheme': 'http'}])
         blocked_ips = []
         print("Conexión con ElasticSearch establecida")
-        print("Se van a obtener datos de los últimos 20 segundos")
 
         while True:
             # Tiempo actual
