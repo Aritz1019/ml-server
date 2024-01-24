@@ -115,8 +115,8 @@ def main():
             query_range = {
                 "range": {
                     "@timestamp": {
-                        "gte": (current_time - timedelta(seconds=20)).isoformat(),
-                        "lt": (current_time - timedelta(seconds=2)).isoformat(),
+                        "gte": (current_time - timedelta(seconds=3)).isoformat(),
+                        "lt": (current_time - timedelta(seconds=1)).isoformat(),
                     }
                 }
             }
@@ -158,7 +158,7 @@ def main():
                                 block_ip(ips[x])
 
 
-            time.sleep(2)
+            time.sleep(1)
     except Exception as e:
         print(e)
 
