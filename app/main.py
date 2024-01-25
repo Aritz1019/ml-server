@@ -55,6 +55,7 @@ def preprocesamiento(data):
     test_real_data = test_real_data[~test_real_data['destination.ip'].apply(is_ip_in_range)]
     test_real_data = test_real_data[~test_real_data['source.ip'].apply(is_ip_in_range)]
     test_real_data = test_real_data[test_real_data['source.ip'] != '10.0.0.133']
+    test_real_data = test_real_data[test_real_data['source.ip'] != '10.0.3.130']
 
     real_data_grouped_df = test_real_data.groupby(['@timestamp', 'destination.ip', 'source.ip'])
 
