@@ -165,6 +165,7 @@ def main():
             time.sleep(2)
     except Exception as e:
         print(e)
+        return None
 
 if __name__ == "__main__":
     main()
