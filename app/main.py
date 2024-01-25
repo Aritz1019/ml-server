@@ -28,8 +28,9 @@ port_elastic = os.environ.get('PORT_ELASTIC')
 def is_ip_in_range(ip):
     pattern1 = re.compile(r'^169\.254\.\d{1,3}\.\d{1,3}$')
     pattern2 = re.compile(r'^192\.168\.\d{1,3}\.\d{1,3}$')
+    pattern3 = re.compile(r'^172\.20\.\d{1,3}\.\d{1,3}$')
 
-    return bool(pattern1.match(ip) or pattern2.match(ip))
+    return bool(pattern1.match(ip) or pattern2.match(ip) or pattern3.match(ip))
 
 def count_open_requests(x):
     return x['event.end'].isnull().sum()
