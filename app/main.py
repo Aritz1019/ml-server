@@ -147,19 +147,20 @@ def main():
 
                     print('---------------------------------------------------------')
                     for x in range(len(final_real_data)):
-                        traffic = np.array([list(final_real_data[x])])
-                        distances, indices = my_nbrs.kneighbors(traffic)
-                        cluster = my_model.labels_[indices[0][0]]
+                        if ips[x] not in blocked_ips:
+                            traffic = np.array([list(final_real_data[x])])
+                            distances, indices = my_nbrs.kneighbors(traffic)
+                            cluster = my_model.labels_[indices[0][0]]
 
-                        if cluster != 0:
-                            if cluster == 1:
-                                print(f'Ataque Slowloris detectado desde la ip {ips[x]}')
-                            elif cluster == -1:
-                                print(f'Ataque HTTP Flood detectado desde la ip {ips[x]}')
-                            if ips[x] not in blocked_ips:
-                                print(f"Bloqueando la ip {ips[x]}")
-                                blocked_ips.append(ips[x])
-                                block_ip(ips[x])
+                            if cluster != 0:
+                                if cluster == 1:
+                                    print(f'Ataque Slowloris detectado desde la ip {ips[x]}')
+                                elif cluster == -1:
+                                    print(f'Ataque HTTP Flood detectado desde la ip {ips[x]}')
+                                if ips[x] not in blocked_ips:
+                                    print(f"Bloqueando la ip {ips[x]}")
+                                    blocked_ips.append(ips[x])
+                                    block_ip(ips[x])
 
 
             time.sleep(2)
